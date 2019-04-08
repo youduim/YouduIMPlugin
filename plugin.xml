@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	id="im.xinda.youdu.plugins" version="1.0.1">
+  <name>YouduIMPlugin</name>
+  <js-module name="YouduIMPlugin" src="www/YouduIMPlugin.js">
+    <clobbers target="cordova.plugins.YouduIMPlugin"/>
+  </js-module>
+  <platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="YouduIMPlugin">
+        <param name="android-package" value="im.xinda.youdu.plugins.YouduIMPlugin"/>
+        <param name="onload" value="true"/>
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+    	<permission
+        		android:name="your_app_id.permission.MIPUSH_RECEIVE"
+        		android:protectionLevel="signature" />
+    	<uses-permission android:name="your_app_id.permission.MIPUSH_RECEIVE" />
+    	<permission
+        		android:name="your_app_id.push.permission.MESSAGE"
+        		android:protectionLevel="signature" />
+    	<uses-permission android:name="your_app_id.push.permission.MESSAGE" />
+    </config-file>
+
+
+    <config-file target="app/src/main/res/values/strings.xml" parent="/resources">
+    		<string name="meizu_app_id">your_meizu_app_id</string>
+    		<string name="meizu_app_secret">your_meizu_app_secret</string>
+    		<string name="meizu_app_key">your_meizu_app_key</string>
+    		<string name="huawei_app_id">your_huawei_app_id</string>
+    		<string name="huawei_app_secret">your_huawei_app_secret</string>
+    		<string name="xiaomi_app_id">your_xiaomi_app_id</string>
+    		<string name="xiaomi_app_secret">your_xiaomi_app_secret</string>
+    		<string name="xiaomi_app_key">your_xiaomi_app_key</string>
+    		<string name="amap_app_id">your_amap_app_id</string>
+    </config-file>
+	<config-file target="AndroidManifest.xml" parent="/manifest/application">    	
+			<meta-data
+            	android:name="com.huawei.hms.client.appid"
+            	android:value="@string/huawei_app_id" />
+            
+        	<provider
+            	android:name="com.huawei.hms.update.provider.UpdateProvider"
+            	android:authorities="your_app_id.update.provider"
+            	android:exported="false"
+            	android:grantUriPermissions="true" />
+
+        	<receiver android:name="im.xinda.youdu.broadcastreceiver.MeizuBroadcastReceiver">
+            	<intent-filter>
+                	<action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                	<action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                	<action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
+                	<action android:name="com.meizu.c2dm.intent.REGISTRATION" />
+                	<action android:name="com.meizu.c2dm.intent.RECEIVE" />
+                	<category android:name="your_app_id" />
+            	</intent-filter>
+        	</receiver>
+        	<meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_app_id" />
+
+
+        	<activity android:name="im.xinda.youdu.ui.activities.ChatActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+        	<activity android:name="im.xinda.youdu.ui.activities.ChatDetailActivity" android:theme="@style/AppTheme" android:screenOrientation="portrait"/>
+        	<activity android:name="im.xinda.youdu.ui.activities.UserActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+        	<activity android:name="im.xinda.youdu.ui.activities.ChatFileActivity" android:launchMode="singleTask" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+        	<activity android:name="im.xinda.youdu.ui.activities.ProfileActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SessionManageActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.VideoConferenceActivity" android:launchMode="singleTop" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DoubleMeetingActivity" android:launchMode="singleTop" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SessionSettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.WebActivity" android:configChanges="orientation|screenSize" android:hardwareAccelerated="true"  android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DeptPreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme_Bottom" />
+			<activity android:name="im.xinda.youdu.ui.activities.SessionSearchActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SessionMemberSelectorActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme_Bottom" />
+			<activity android:name="im.xinda.youdu.ui.activities.SessionCreatorActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AlbumActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DeptActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.FavoriteDepartmentActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SinglePhotoActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.GalleryActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SystemAndBroadcastActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SystemMsgActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.BroadcastMsgActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.CollectionsActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.FileBrowserActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ShareActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme_Bottom" />
+			<activity android:name="im.xinda.youdu.ui.activities.SettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.FontSettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SilentActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.CollectDetailActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SearchActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme_Bottom" />
+			<activity android:name="im.xinda.youdu.ui.activities.CodeReceiverActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.CaptureQrcodeActivity" android:clearTaskOnLaunch="true" android:screenOrientation="portrait" android:stateNotNeeded="true" android:theme="@style/AppCompatCaptureTheme" android:windowSoftInputMode="stateAlwaysHidden" />
+			<activity android:name="im.xinda.youdu.ui.activities.ConfirmLoginActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.FileCacheClearActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ChatPhotoPreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ServerQrcodeActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.QrcodeDisplayActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ServerDetailActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AvatarCameraCaptureActivity" android:screenOrientation="portrait"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AvatarPreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AvatarEditActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.LaunchPermissionActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DownloadOrUpdateActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AvatarCamera2Activity"  android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.VerifyPasswordActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ReverseLoginActivity" android:exported="true" android:screenOrientation="portrait" android:theme="@style/AppTheme">
+			<intent-filter>
+				<action android:name="im.xinda.youdu.ui.Reverselogin" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			</activity>
+			<activity android:name="im.xinda.youdu.ui.activities.DBMigrationActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.EnterpriseAppActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.InvitationEditActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ChatRecordActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SDCardFileActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/><activity android:name="im.xinda.youdu.ui.activities.SDCardActivity" android:screenOrientation="portrait"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ClientManagerActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.VideoCaptureActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme" />
+			<activity android:name="im.xinda.youdu.ui.activities.VideoViewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme" />
+			<activity android:name="im.xinda.youdu.ui.activities.InvitationShowActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ServerSettingActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
+			<activity android:name="im.xinda.youdu.ui.activities.EnterpriseServerInfoSearchActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SearchIndexDownloadActivity" android:launchMode="singleInstance" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.MapLocationActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.WipeDataActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DevicesActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.CreatePswActivity" android:launchMode="singleTask" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysVisible"  android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.EnterPswActivity" android:launchMode="singleTask" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysVisible"  android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SessionMessageActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.TamperedShowActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SingleModifyActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ModifyPasswordActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.RadioListActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SingleMessagePreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ManageStickerActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.MessageAlertSettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AccountSafetyActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.OfflinePasswordSettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SMSSendActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AboutActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ApplicationDetailsActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SMSResultActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.UserSettingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.SignatureModifyActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.PhoneIdentifyActivity" android:launchMode="singleTop" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.MapViewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.MapSearchActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.ReceiptStatusActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AnnouncementModifyActivity" android:screenOrientation="portrait"/>
+			<activity android:name="im.xinda.youdu.ui.activities.BackgroundActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.DefaultBackgroundActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.AllSessionsActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.WebFileActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+			<activity android:name="im.xinda.youdu.ui.activities.FeedBackActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"/>
+		</config-file>
+
+
+		
+
+    	<framework src="src/android/YouduIMPlugin.gradle" custom="true" type="gradleReference" />
+    	<resource-file src="src/android/imkit.aar" target="libs/imkit.aar"/>
+    	<resource-file src="src/android/sdk.aar" target="libs/sdk.aar"/>
+
+    	<source-file src="src/android/YouduIMPlugin.java" target-dir="src/im/xinda/youdu/plugins"/>
+  </platform>
+</plugin>

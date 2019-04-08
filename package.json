@@ -1,0 +1,26 @@
+{
+  "name": "im.xinda.youdu.plugins",
+  "version": "1.0.1",
+  "cordova": {
+    "id": "im.xinda.youdu.plugins",
+    "platforms": []
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeason789/YouduIMPlugin.git"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "jeason789",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeason789/YouduIMPlugin/issues"
+  },
+  "homepage": "https://github.com/jeason789/YouduIMPlugin#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "description": ""
+}
