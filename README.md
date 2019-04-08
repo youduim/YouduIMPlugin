@@ -52,24 +52,24 @@
 - 获取会话列表
 
 	```
-	cordova.plugins.YouduIMPlugin.getSessionList(success，error) //success 回调函数获取会话列表信息 ,error错误回调函数
+	cordova.plugins.YouduIMPlugin.getSessionList(success，error); //success 回调函数获取会话列表信息 ,error错误回调函数
 	```	
 
 - 打开会话
 
 	```
-	cordova.plugins.YouduIMPlugin.gotoSession(sessionId，success,error) //sessionId 目标会话ID,success 成功回调函数,error错误回调函数
+	cordova.plugins.YouduIMPlugin.gotoSession(sessionId，success, error); //sessionId 目标会话ID,success 成功回调函数,error错误回调函数
 	```
 
 - 创建会话
 
 	```
-	cordova.plugins.YouduIMPlugin.gotoCreateSession(success,error) // success 成功回调函数,error错误回调函数
+	cordova.plugins.YouduIMPlugin.gotoCreateSession(success, error); // success 成功回调函数,error错误回调函数
 	```
 	
 - 退出登录
 	
 	```
-	cordova.plugins.YouduIMPlugin.logout(success,error) // success 成功回调函数,error错误回调函数
+	cordova.plugins.YouduIMPlugin.logout(success, error); // success 成功回调函数,error错误回调函数
 	```
 	
