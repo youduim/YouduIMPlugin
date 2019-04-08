@@ -36,9 +36,6 @@
 
 
 - 服务器设置
-  服务器设置分为两种，通过总机号指定服务器登录和手动设置服务器信息。
- 
-  手动设置服务器信息:
 	```
 	cordova.plugins.YouduIMPlugin.setServerSetting(host1, host2, port, success, error);//host1 外网服务器,host2 内网服务器,port 端口,success 成功回调函数,error错误回调函数
 	```
