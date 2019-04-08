@@ -27,7 +27,10 @@
 	- 	your\_xiaomi\_app\_key 替换为小米推送app key
 	- 	your\_amap\_app\_id 替换为高德地图app_id
 
-
+	- 	[高德地图集成申请地址](https://lbs.amap.com/dev/key/app)
+	- 	[华为推送集成申请地址](https://developer.huawei.com/consumer/cn/console#/appManage)
+	- 	[小米推送集成申请地址](http://admin.xmpush.xiaomi.com/zh_CN/)
+	- 	[魅族推送集成申请地址](http://push.meizu.com)
 
 ## 插件接口说明
 
@@ -36,7 +39,7 @@
   服务器设置分为两种，通过总机号指定服务器登录和手动设置服务器信息。
   1. 总机号登录方式：
 	```
-	cordova.plugins.YouduIMPlugin.setBuin(buin,success,error)；//buin 总机号,success 成功回调函数,error错误回调函数
+	cordova.plugins.YouduIMPlugin.setBuin(buin, success, error)；//buin 总机号,success 成功回调函数,error错误回调函数
 	```
   2. 手动设置服务器信息:
 	```
@@ -52,13 +55,13 @@
 - 获取会话列表
 
 	```
-	cordova.plugins.YouduIMPlugin.getSessionList(success，error); //success 回调函数获取会话列表信息 ,error错误回调函数
+	cordova.plugins.YouduIMPlugin.getSessionList(success, error); //success 回调函数获取会话列表信息 ,error错误回调函数
 	```	
 
 - 打开会话
 
 	```
-	cordova.plugins.YouduIMPlugin.gotoSession(sessionId，success, error); //sessionId 目标会话ID,success 成功回调函数,error错误回调函数
+	cordova.plugins.YouduIMPlugin.gotoSession(sessionId, success, error); //sessionId 目标会话ID,success 成功回调函数,error错误回调函数
 	```
 
 - 创建会话

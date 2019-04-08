@@ -72,11 +72,6 @@ public class YouduIMPlugin extends CordovaPlugin {
         } else if (action.equalsIgnoreCase("gotoCreateSession")) {
             this.gotoCreateSession();
             return true;
-        } else if (action.equalsIgnoreCase("setBuin")) {
-            setCallbackContext(callbackContext);
-            String buin = args.getString(0);
-            this.setBuin(buin);
-            return true;
         } else if (action.equalsIgnoreCase("setServer")) {
             setCallbackContext(callbackContext);
             String host1 = args.getString(0);
@@ -119,10 +114,6 @@ public class YouduIMPlugin extends CordovaPlugin {
     
     private void setServerInfo(String host1, String host2, String port) {
         YouduIM.setServerSetting(host1,host2,port);
-    }
-
-    private void setBuin(String buin) {
-        YouduIM.setBuin(buin);
     }
 
     private void loginWithAccount(String account, String password) {
