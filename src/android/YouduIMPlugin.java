@@ -99,7 +99,7 @@ public class YouduIMPlugin extends CordovaPlugin {
             setCallbackContext(callbackContext);
             logOut();
             return true;
-        } else if (action.equalsIgnoreCase("setUnreadCountCallback")) {
+        } else if (action.equalsIgnoreCase("getUnreadCount")) {
             setCallbackContext(callbackContext);
             return true;
         }
