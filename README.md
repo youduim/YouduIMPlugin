@@ -52,18 +52,18 @@
 	```
 	cordova.plugins.YouduIMPlugin.loginWithAccount(account, password, success, error);	 
 	```
-	account账号,success 成功回调函数,error错误回调函数
+	account账号, success 成功回调函数, error错误回调函数
 
 	
 	
 	```
 	success回调数据	
 	{
-	"loginSucc": gid
+		"loginSucc": gid
 	}
 	error回调数据
 	{
-	"loginFailed":
+		"loginFailed":
 		{
 			"title":"登录失败",
 			"message":"密码错误"
