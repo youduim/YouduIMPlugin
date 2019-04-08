@@ -72,4 +72,10 @@
 	```
 	cordova.plugins.YouduIMPlugin.logout(success, error); // success 成功回调函数,error错误回调函数
 	```
+- 获取会话未读数
+	
+	
+	```
+	cordova.plugins.YouduIMPlugin.getUnreadCount(callback); // callback 插件通过此回调函数通知未读数变化 
+	```
 	
