@@ -61,7 +61,25 @@ public class YouduIMPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         NotificationCenter.clearHandlers(this);
         NotificationCenter.scanHandlers(this);
-        if (action.equalsIgnoreCase("getSessionList")) {
+        if (action.equalsIgnoreCase("setServer")) {
+            setCallbackContext(callbackContext);
+            String host1 = args.getString(0);
+            String host2 = args.getString(1);
+            String port = args.getString(2);
+            this.setServerInfo(host1, host2, port);
+            return true;
+        } else if (action.equalsIgnoreCase("loginWithAccount")) {
+            setCallbackContext(callbackContext);
+            String account = args.getString(0);
+            String password = args.getString(1);
+            this.loginWithAccount(account, password);
+            return true;
+        } else if (action.equalsIgnoreCase("loginWithLoginKey")) {
+            setCallbackContext(callbackContext);
+            String loginKey = args.getString(0);
+            this.loginWithLoginKey(loginKey);
+            return true;
+        } else if (action.equalsIgnoreCase("getSessionList")) {
             setCallbackContext(callbackContext);
             this.getSessionList(callbackContext);
             return true;
@@ -72,55 +90,37 @@ public class YouduIMPlugin extends CordovaPlugin {
         } else if (action.equalsIgnoreCase("gotoCreateSession")) {
             this.gotoCreateSession();
             return true;
-        } else if (action.equalsIgnoreCase("setServer")) {
+        } else if (action.equalsIgnoreCase("getUnreadCount")) {
             setCallbackContext(callbackContext);
-            String host1 = args.getString(0);
-            String host2 = args.getString(1);
-            String port = args.getString(2);
-            this.setServerInfo(host1,host2,port);
-            return true;
-        } else if (action.equalsIgnoreCase("loginWithAccount")) {
-            setCallbackContext(callbackContext);
-            String account = args.getString(0);
-            String password = args.getString(1);
-            this.loginWithAccount(account,password);
-            return true;
-        } else if (action.equalsIgnoreCase("loginWithLoginKey")) {
-            setCallbackContext(callbackContext);
-            String loginKey = args.getString(0);
-            this.loginWithLoginKey(loginKey);
             return true;
         } else if (action.equalsIgnoreCase("logOut")) {
             setCallbackContext(callbackContext);
             logOut();
             return true;
-        } else if (action.equalsIgnoreCase("getUnreadCount")) {
-            setCallbackContext(callbackContext);
-            return true;
         }
         return false;
     }
-    
+
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
         initApp();
     }
 
-    private void initApp(){
+    private void initApp() {
         YouduApp.setCurrentActivity(cordova.getActivity());
         YouduApp.onAppCreate(cordova.getActivity().getApplication());
     }
-    
+
     private void setServerInfo(String host1, String host2, String port) {
-        YouduIM.setServerSetting(host1,host2,port);
+        YouduIM.setServerSetting(host1, host2, port);
     }
 
     private void loginWithAccount(String account, String password) {
         TaskManager.getMainExecutor().post(new Task() {
             @Override
             protected void run() throws Exception {
-                YouduIM.loginWithAccount(account,password);
+                YouduIM.loginWithAccount(account, password);
             }
         });
     }
@@ -129,7 +129,7 @@ public class YouduIMPlugin extends CordovaPlugin {
         YouduIM.loginWithLoginKey(loginKey);
     }
 
-    private void getSessionList( CallbackContext callbackContext) {
+    private void getSessionList(CallbackContext callbackContext) {
         TaskManager.getGlobalExecutor().post(new Task() {
             @Override
             protected void run() throws Exception {
@@ -148,7 +148,7 @@ public class YouduIMPlugin extends CordovaPlugin {
 
 
     @NotificationHandler(name = YDSessionUIModel.kSessionListChangeNotification)
-    private void onSessionListchange(List<UISessionInfo> sessionInfoList){
+    private void onSessionListchange(List<UISessionInfo> sessionInfoList) {
         String strSessionList = JSON.toJSONString(sessionInfoList);
         JSONArray sessionListArray = null;
         try {
@@ -158,7 +158,7 @@ public class YouduIMPlugin extends CordovaPlugin {
         }
         JSONObject sessionsInfoObject = new JSONObject();
         try {
-            sessionsInfoObject.put("sessionList",sessionListArray);
+            sessionsInfoObject.put("sessionList", sessionListArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -166,7 +166,7 @@ public class YouduIMPlugin extends CordovaPlugin {
 
         for (int i = 0; i < sessionInfoList.size(); i++) {
             UISessionInfo info = sessionInfoList.get(i);
-            loadHeadForsession(info.getSessionId(),getCallbackContext());
+            loadHeadForsession(info.getSessionId(), getCallbackContext());
         }
     }
 
@@ -180,7 +180,7 @@ public class YouduIMPlugin extends CordovaPlugin {
                 JSONObject object = new JSONObject();
                 try {
                     object.put("sessionId", sessionId);
-                    object.put("avatar",base64);
+                    object.put("avatar", base64);
                     imageInfo.put("head", object);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -191,10 +191,11 @@ public class YouduIMPlugin extends CordovaPlugin {
         });
     }
 
-    private void loadSessionHead(String sessionId,TaskCallback<String> callback) {
+    private void loadSessionHead(String sessionId, TaskCallback<String> callback) {
         ImageLoader.getInstance().loadSessionIcon(new Thumbnail() {
 
             private String uri;
+
             @Override
             public void setBitmap(Bitmap bitmap, boolean b) {
                 callback.onFinished(ImagePresenter.bitmap2StrByBase64(bitmap));
@@ -227,8 +228,8 @@ public class YouduIMPlugin extends CordovaPlugin {
 
     }
 
-    private void gotoSession(String sessionId){
-        ActivityDispatcher.gotoSession(cordova.getActivity(),sessionId);
+    private void gotoSession(String sessionId) {
+        ActivityDispatcher.gotoSession(cordova.getActivity(), sessionId);
     }
 
     private void gotoCreateSession() {
@@ -236,29 +237,35 @@ public class YouduIMPlugin extends CordovaPlugin {
     }
 
 
-    private void logOut(){
+    private void logOut() {
         TaskManager.getMainExecutor().post(new Task() {
             @Override
             protected void run() throws Exception {
                 YDLoginModel.getInstance().logout();
                 JSONObject logOut = new JSONObject();
-                logOut.put("logout","success");
+                logOut.put("logout", "success");
                 getCallbackContext().sendPluginResult(makeSuccPluginResult(logOut));
             }
         });
     }
 
     private PluginResult makeSuccPluginResult(JSONObject object) {
-        PluginResult result =  new PluginResult(PluginResult.Status.OK,object);
+        PluginResult result = new PluginResult(PluginResult.Status.OK, object);
         result.setKeepCallback(true);
         return result;
-    }    
+    }
+
+    private PluginResult makeErrorPluginResult(JSONObject object) {
+        PluginResult result = new PluginResult(PluginResult.Status.ERROR, object);
+        result.setKeepCallback(true);
+        return result;
+    }
 
     @NotificationHandler(name = YDSessionUIModel.kSessionListTotalUnreadSizeChangeNotification)
     private void onTotalUnreadSizeChange(int size) {
         JSONObject unreadCount = new JSONObject();
         try {
-            unreadCount.put("unreadCount",size);
+            unreadCount.put("unreadCount", size);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -269,7 +276,7 @@ public class YouduIMPlugin extends CordovaPlugin {
     private void loginSucc(long gid) {
         JSONObject loginSucc = new JSONObject();
         try {
-            loginSucc.put("loginSucc",gid);
+            loginSucc.put("loginSucc", gid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -277,27 +284,37 @@ public class YouduIMPlugin extends CordovaPlugin {
     }
 
     @NotificationHandler(name = LoginPresenter.NOTIFICATION_LOGIN_FAILED)
-    private void onLoginFailed(String title,String message){
+    private void onLoginFailed(String title, String message) {
         MaterialDialog dialog = new TextDialog(cordova.getContext())
                 .setContent(message)
                 .setTitle(title)
                 .setFirstButton(RUtils.INSTANCE.getString(im.xinda.youdu.ui.R.string.confirm));
         dialog.setDialogButtonClick(buttonName -> {
             // todo handle login failed
+            JSONObject loginFailed = new JSONObject();
+            JSONObject failedInfo = new JSONObject();
+            try {
+                failedInfo.put("title",title);
+                failedInfo.put("message",message);
+                loginFailed.put("loginFailed", failedInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            getCallbackContext().sendPluginResult(makeSuccPluginResult(loginFailed));
         });
 
         dialog.show();
     }
 
     @NotificationHandler(name = YDLoginModel.kOnConfirmKickOut)
-    private void onComfirmKickOut(String message){
+    private void onComfirmKickOut(String message) {
         MaterialDialog textDialog = new HintTextDialog(cordova.getActivity())
                 .setContent(message)
                 .setFirstButton(cordova.getContext().getString(im.xinda.youdu.R.string.determine))
                 .setDialogButtonClick(buttonName -> {
                     JSONObject kickOut = new JSONObject();
                     try {
-                        kickOut.put("kickOut",message);
+                        kickOut.put("kickOut", message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
