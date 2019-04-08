@@ -99,6 +99,9 @@ public class YouduIMPlugin extends CordovaPlugin {
             setCallbackContext(callbackContext);
             logOut();
             return true;
+        } else if (action.equalsIgnoreCase("setUnreadCountCallback")) {
+            setCallbackContext(callbackContext);
+            return true;
         }
         return false;
     }
@@ -262,13 +265,13 @@ public class YouduIMPlugin extends CordovaPlugin {
 
     @NotificationHandler(name = YDSessionUIModel.kSessionListTotalUnreadSizeChangeNotification)
     private void onTotalUnreadSizeChange(int size) {
-        JSONObject totalSize = new JSONObject();
+        JSONObject unreadCount = new JSONObject();
         try {
-            totalSize.put("totalSize",size);
+            unreadCount.put("unreadCount",size);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        getCallbackContext().sendPluginResult(makeSuccPluginResult(totalSize));
+        getCallbackContext().sendPluginResult(makeSuccPluginResult(unreadCount));
     }
 
     @NotificationHandler(name = YDLoginModel.kLoginSuccNotification)
