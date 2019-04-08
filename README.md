@@ -13,13 +13,17 @@
 ## 推送与高德地图信息配置
 
 1. YouduIMPlugin 支持华为、小米、魅族消息推送通道, 开发者需自行申请开通推送服务.
+
 	- 	[华为推送集成申请地址](https://developer.huawei.com/consumer/cn/console#/appManage)
 	- 	[小米推送集成申请地址](http://admin.xmpush.xiaomi.com/zh_CN/)
 	- 	[魅族推送集成申请地址](http://push.meizu.com)
+	
 2. YouduIMPlugin 内部已集成高德地图SDK, 开发者需要申请高德地图服务
 	- 	[高德地图集成申请地址](https://lbs.amap.com/dev/key/app)
+	
 3. 打开主工程AndroidManifest.xml,修改如下信息
 	- 替换所有 your\_app\_id 为主工程的application id (一般为build.gradle的application id, 如果build.gradle没指定, 则以AndroidManifest.xml的package为准)
+	
 4. 替换string.xml 推送信息
 	- 	your\_huawei\_app\_id 替换为华为推送app id
 	- 	your\_huawei\_app\_secret 替换为华为推送app secret
