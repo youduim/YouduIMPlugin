@@ -18,7 +18,7 @@
 	- 	[小米推送集成申请地址](http://admin.xmpush.xiaomi.com/zh_CN/)
 	- 	[魅族推送集成申请地址](http://push.meizu.com)
 	
-2. YouduIMPlugin 内部已集成高德地图SDK, 开发者需要申请高德地图服务
+2. YouduIMPlugin 内部已集成高德地图SDK, 开发者需要申请开通高德地图服务
 	- 	[高德地图集成申请地址](https://lbs.amap.com/dev/key/app)
 	
 3. 打开主工程AndroidManifest.xml,修改如下信息
