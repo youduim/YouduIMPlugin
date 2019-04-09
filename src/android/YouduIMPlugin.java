@@ -2,36 +2,26 @@ package im.xinda.youdu.plugins;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-
 import com.alibaba.fastjson.JSON;
-
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
-
-import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
-
-import im.xinda.youdu.item.PushConfigInfo;
+import im.xinda.youdu.broadcastreceiver.ScreenUtil;
+import im.xinda.youdu.impl.YDApiClient;
 import im.xinda.youdu.item.UISessionInfo;
-import im.xinda.youdu.jgapi.ApiClient;
 import im.xinda.youdu.lib.notification.NotificationCenter;
 import im.xinda.youdu.lib.notification.NotificationHandler;
 import im.xinda.youdu.lib.task.Task;
 import im.xinda.youdu.lib.task.TaskManager;
-import im.xinda.youdu.model.LoginModel;
 import im.xinda.youdu.model.YDLoginModel;
 import im.xinda.youdu.model.YDSessionUIModel;
 import im.xinda.youdu.model.YouduIM;
 import im.xinda.youdu.presenter.ImagePresenter;
-import im.xinda.youdu.ui.activities.VerifyPasswordActivity;
 import im.xinda.youdu.ui.app.YouduApp;
-import im.xinda.youdu.ui.config.PackageConfig;
 import im.xinda.youdu.ui.dialog.HintTextDialog;
 import im.xinda.youdu.ui.dialog.MaterialDialog;
 import im.xinda.youdu.ui.dialog.TextDialog;
@@ -41,6 +31,7 @@ import im.xinda.youdu.ui.presenter.ActivityDispatcher;
 import im.xinda.youdu.ui.presenter.LoginPresenter;
 import im.xinda.youdu.utils.RUtils;
 import im.xinda.youdu.utils.TaskCallback;
+import im.xinda.youdu.utils.Utils;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -107,9 +98,32 @@ public class YouduIMPlugin extends CordovaPlugin {
         initApp();
     }
 
-    private void initApp() {
+    @Override
+    public void onResume(boolean multitasking) {
+        super.onResume(multitasking);
         YouduApp.setCurrentActivity(cordova.getActivity());
+        YDApiClient.INSTANCE.restore();
+
+    }
+
+    @Override
+    public void onPause(boolean multitasking) {
+        super.onPause(multitasking);
+        YouduApp.setCurrentActivity(null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!Utils.isAppOnForeground()
+                || !ScreenUtil.INSTANCE.getScreenOn()) {
+            YDApiClient.INSTANCE.setIsInBackground(cordova.getActivity(), true);
+        }
+    }
+
+    private void initApp() {
         YouduApp.onAppCreate(cordova.getActivity().getApplication());
+
     }
 
     private void setServerInfo(String host1, String host2, String port) {
