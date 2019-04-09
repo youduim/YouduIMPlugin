@@ -24,6 +24,10 @@
         		android:name="your_app_id.push.permission.MESSAGE"
         		android:protectionLevel="signature" />
     	<uses-permission android:name="your_app_id.push.permission.MESSAGE" />
+    	<permission     
+    			android:name="your_app_id.push.permission.MESSAGE"    
+    			android:protectionLevel="signature" />
+		<uses-permission android:name="your_app_id.push.permission.MESSAGE" />
     </config-file>
 
 
