@@ -8,7 +8,7 @@
 ## 集成步骤
 
 
-1. 打开terminal,在主工程目录下 cordova plugin add https://github.com/jeason789/YouduIMPlugin.git 添加插件
+1. 打开terminal,在主工程目录下 cordova plugin add https://github.com/youduim/YouduIMPlugin.git 添加插件
 
 ## 推送与高德地图信息配置
 
