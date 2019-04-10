@@ -7,17 +7,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeason789/YouduIMPlugin.git"
+    "url": "git+https://github.com/youduim/youdu-cordova-plugin-android.git"
   },
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "jeason789",
+  "author": "youduim",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jeason789/YouduIMPlugin/issues"
+    "url": "https://github.com/youduim/youdu-cordova-plugin-android/issues"
   },
-  "homepage": "https://github.com/jeason789/YouduIMPlugin#readme",
+  "homepage": "https://github.com/youduim/youdu-cordova-plugin-android#readme",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
