@@ -24,7 +24,7 @@
 3. 打开主工程AndroidManifest.xml,修改如下信息
 	- 替换所有 your\_app\_id 为主工程的application id (一般为build.gradle的application id, 如果build.gradle没指定, 则以AndroidManifest.xml的package为准)
 	
-4. 替换string.xml 推送信息
+4. 替换strings.xml 推送信息
 	- 	your\_huawei\_app\_id 替换为华为推送app id
 	- 	your\_huawei\_app\_secret 替换为华为推送app secret
 	- 	your\_meizu\_app\_id 替换为魅族推送app id
