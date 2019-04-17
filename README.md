@@ -33,7 +33,7 @@
 	- 	your\_xiaomi\_app\_id 替换为小米推送app id
 	- 	your\_xiaomi\_app\_secret 替换为小米推送app secret
 	- 	your\_xiaomi\_app\_key 替换为小米推送app key
-	- 	your\_amap\_app\_id 替换为高德地图app_id
+	- 	your\_amap\_app\_id 替换为高德地图 key
 
 	
 	
