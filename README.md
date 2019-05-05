@@ -135,7 +135,7 @@
 - 退出登录
 	
 	```
-	cordova.plugins.YouduIMPlugin.logout(success, error);
+	cordova.plugins.YouduIMPlugin.logOut(success, error);
 	```
 	success 成功回调函数,error错误回调函数
 		
