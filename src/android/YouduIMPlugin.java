@@ -86,9 +86,17 @@ public class YouduIMPlugin extends CordovaPlugin {
             return true;
         } else if (action.equalsIgnoreCase("logOut")) {
             setCallbackContext(callbackContext);
-            logOut();
+            this.logOut();
             return true;
+        } else if (action.equalsIgnoreCase("chatWith")) {
+            try {
+                String gid = args.getString(0);
+                this.chatWith(Long.parseLong(gid));
+            } catch (Exception e) {
+                Logger.error(e);
+            }
         }
+
         return false;
     }
 
@@ -160,6 +168,9 @@ public class YouduIMPlugin extends CordovaPlugin {
 
     }
 
+    private void chatWith(long gid) {
+        YDApiClient.INSTANCE.getModelManager().getSessionModel().createSingleSession(gid);
+    }
 
     @NotificationHandler(name = YDSessionUIModel.kSessionListChangeNotification)
     private void onSessionListchange(List<UISessionInfo> sessionInfoList) {
@@ -337,6 +348,11 @@ public class YouduIMPlugin extends CordovaPlugin {
         textDialog.setCancelable(false);
         textDialog.setCanceledOnTouchOutside(false);
         textDialog.show();
+    }
+    
+    @NotificationHandler(name= YDSessionModel.CREATE_SINGLE_SESSION_SUCCESS)
+    void onCreateSingleSessionSuccess(boolean result, SessionInfo sessionInfo) {
+        ActivityDispatcher.gotoChat(cordova.getActivity(), sessionInfo.getSessionId());
     }
 
 }

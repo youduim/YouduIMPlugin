@@ -162,6 +162,8 @@
 		"unreadCount" : 0
 	}
 	```
+- 根据gid发起会话
 
-
-
+	```
+	cordova.plugins.YouduIMPlugin.chatWith(gid); 
+	```

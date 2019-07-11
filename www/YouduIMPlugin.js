@@ -28,3 +28,7 @@ exports.logOut = function (success,error) {
 exports.getUnreadCount = function(callback) {
     exec(callback, null, 'YouduIMPlugin', 'getUnreadCount', []);
 }
+
+exports.chatWith = function(callback) {
+    exec(callback, null, "YouduIMPlugin", 'chatWith', ['100334']);
+}
