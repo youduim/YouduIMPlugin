@@ -162,8 +162,9 @@
 		"unreadCount" : 0
 	}
 	```
-- 根据gid发起会话
+- 根据gids数组发起会话
 
 	```
-	cordova.plugins.YouduIMPlugin.chatWith(gid); 
+	cordova.plugins.YouduIMPlugin.chatWith(gids); 
 	```
+	gids： 用户gid数组，如[100334,100221]

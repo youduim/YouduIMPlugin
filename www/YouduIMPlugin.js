@@ -29,6 +29,6 @@ exports.getUnreadCount = function(callback) {
     exec(callback, null, 'YouduIMPlugin', 'getUnreadCount', []);
 }
 
-exports.chatWith = function(callback) {
-    exec(callback, null, "YouduIMPlugin", 'chatWith', ['100334']);
+exports.chatWith = function(gids) {
+    exec(null, null, "YouduIMPlugin", 'chatWith', [gids]);
 }

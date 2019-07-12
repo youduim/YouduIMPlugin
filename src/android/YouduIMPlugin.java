@@ -1,27 +1,40 @@
 package im.xinda.youdu.plugins;
 
+import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.widget.Toast;
+
 import com.alibaba.fastjson.JSON;
+
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import im.xinda.youdu.broadcastreceiver.ScreenUtil;
+import im.xinda.youdu.datastructure.tables.SessionInfo;
 import im.xinda.youdu.impl.YDApiClient;
 import im.xinda.youdu.item.UISessionInfo;
+import im.xinda.youdu.lib.log.Logger;
 import im.xinda.youdu.lib.notification.NotificationCenter;
 import im.xinda.youdu.lib.notification.NotificationHandler;
 import im.xinda.youdu.lib.task.Task;
 import im.xinda.youdu.lib.task.TaskManager;
+import im.xinda.youdu.model.AppModel;
 import im.xinda.youdu.model.YDLoginModel;
+import im.xinda.youdu.model.YDSessionModel;
 import im.xinda.youdu.model.YDSessionUIModel;
 import im.xinda.youdu.model.YouduIM;
 import im.xinda.youdu.presenter.ImagePresenter;
 import im.xinda.youdu.ui.app.YouduApp;
+import im.xinda.youdu.ui.dialog.DialogButtonClick;
 import im.xinda.youdu.ui.dialog.HintTextDialog;
 import im.xinda.youdu.ui.dialog.MaterialDialog;
 import im.xinda.youdu.ui.dialog.TextDialog;
@@ -90,13 +103,20 @@ public class YouduIMPlugin extends CordovaPlugin {
             return true;
         } else if (action.equalsIgnoreCase("chatWith")) {
             try {
-                String gid = args.getString(0);
-                this.chatWith(Long.parseLong(gid));
+                JSONArray array = args.getJSONArray(0);
+                if (array != null) {
+                    List<Long> gids = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        gids.add(array.getLong(i));
+                    }
+                    this.chatWith(gids);
+                }
             } catch (Exception e) {
                 Logger.error(e);
             }
-        }
 
+            return true;
+        }
         return false;
     }
 
@@ -168,9 +188,24 @@ public class YouduIMPlugin extends CordovaPlugin {
 
     }
 
-    private void chatWith(long gid) {
-        YDApiClient.INSTANCE.getModelManager().getSessionModel().createSingleSession(gid);
+    private void chatWith(List<Long> gids) {
+        if (gids == null || gids.isEmpty())
+            return;
+        long myGid = YDApiClient.INSTANCE.getModelManager().getYdAccountInfo().getGid();
+
+        for (int i = 0; i < gids.size(); ++i) {
+            if (gids.get(i) == myGid) {
+                gids.remove(i);
+                break;
+            }
+        }
+        if (gids.size() == 1) {
+            YDApiClient.INSTANCE.getModelManager().getSessionModel().createSingleSession(gids.get(0));
+        } else {
+            YDApiClient.INSTANCE.getModelManager().getSessionModel().createMutipleSession(gids);
+        }
     }
+
 
     @NotificationHandler(name = YDSessionUIModel.kSessionListChangeNotification)
     private void onSessionListchange(List<UISessionInfo> sessionInfoList) {
@@ -314,18 +349,21 @@ public class YouduIMPlugin extends CordovaPlugin {
                 .setContent(message)
                 .setTitle(title)
                 .setFirstButton(RUtils.INSTANCE.getString(im.xinda.youdu.ui.R.string.confirm));
-        dialog.setDialogButtonClick(buttonName -> {
-            // todo handle login failed
-            JSONObject loginFailed = new JSONObject();
-            JSONObject failedInfo = new JSONObject();
-            try {
-                failedInfo.put("title",title);
-                failedInfo.put("message",message);
-                loginFailed.put("loginFailed", failedInfo);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        dialog.setDialogButtonClick(new DialogButtonClick() {
+            @Override
+            public void onClick(@NotNull String s) {
+                // todo handle login failed
+                JSONObject loginFailed = new JSONObject();
+                JSONObject failedInfo = new JSONObject();
+                try {
+                    failedInfo.put("title", title);
+                    failedInfo.put("message", message);
+                    loginFailed.put("loginFailed", failedInfo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                getCallbackContext().sendPluginResult(makeSuccPluginResult(loginFailed));
             }
-            getCallbackContext().sendPluginResult(makeSuccPluginResult(loginFailed));
         });
 
         dialog.show();
@@ -336,23 +374,35 @@ public class YouduIMPlugin extends CordovaPlugin {
         MaterialDialog textDialog = new HintTextDialog(cordova.getActivity())
                 .setContent(message)
                 .setFirstButton(cordova.getContext().getString(im.xinda.youdu.R.string.determine))
-                .setDialogButtonClick(buttonName -> {
-                    JSONObject kickOut = new JSONObject();
-                    try {
-                        kickOut.put("kickOut", message);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                .setDialogButtonClick(new DialogButtonClick() {
+                    @Override
+                    public void onClick(@NotNull String s) {
+                        JSONObject kickOut = new JSONObject();
+                        try {
+                            kickOut.put("kickOut", message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        getCallbackContext().sendPluginResult(makeSuccPluginResult(kickOut));
                     }
-                    getCallbackContext().sendPluginResult(makeSuccPluginResult(kickOut));
                 });
         textDialog.setCancelable(false);
         textDialog.setCanceledOnTouchOutside(false);
         textDialog.show();
     }
-    
-    @NotificationHandler(name= YDSessionModel.CREATE_SINGLE_SESSION_SUCCESS)
+
+    @NotificationHandler(name = YDSessionModel.CREATE_SINGLE_SESSION_SUCCESS)
     void onCreateSingleSessionSuccess(boolean result, SessionInfo sessionInfo) {
         ActivityDispatcher.gotoChat(cordova.getActivity(), sessionInfo.getSessionId());
+    }
+
+    @NotificationHandler(name = YDSessionModel.CREATE_MULTIPLE_SESSION_SUCCESS)
+    void onCreateMultipleSessionSuccess(int code, SessionInfo sessionInfo) {
+        if (code != 0 || sessionInfo == null) {
+            Toast.makeText(cordova.getActivity(), Utils.getCreateMultipleSessionFailureString(code), Toast.LENGTH_SHORT).show();
+        } else {
+            ActivityDispatcher.gotoChat(cordova.getActivity(), sessionInfo.getSessionId());
+        }
     }
 
 }
