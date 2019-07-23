@@ -32,3 +32,7 @@ exports.getUnreadCount = function(callback) {
 exports.chatWith = function(gids) {
     exec(null, null, "YouduIMPlugin", 'chatWith', [gids]);
 }
+
+exports.chatWithAccounts = function(accounts) {
+    exec(null, null, "YouduIMPlugin", 'chatWithAccounts', [accounts]);
+}

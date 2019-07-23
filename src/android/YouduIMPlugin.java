@@ -20,6 +20,7 @@ import java.util.List;
 
 import im.xinda.youdu.broadcastreceiver.ScreenUtil;
 import im.xinda.youdu.datastructure.tables.SessionInfo;
+import im.xinda.youdu.datastructure.tables.UserInfo;
 import im.xinda.youdu.impl.YDApiClient;
 import im.xinda.youdu.item.UISessionInfo;
 import im.xinda.youdu.lib.log.Logger;
@@ -116,8 +117,41 @@ public class YouduIMPlugin extends CordovaPlugin {
             }
 
             return true;
+        } else if (action.equalsIgnoreCase("chatWithAccounts")){
+            try {
+                JSONArray array = args.getJSONArray(0);
+                if (array != null) {
+                    List<String> accounts = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        accounts.add(array.getString(i));
+                    }
+                    this.chatWithAccounts(accounts);
+                }
+            } catch (Exception e) {
+                Logger.error(e);
+            }
+
+            return true;
         }
         return false;
+    }
+
+    private void chatWithAccounts(List<String> accounts) {
+        if (accounts == null || accounts.isEmpty())
+            return;
+        long myGid = YDApiClient.INSTANCE.getModelManager().getYdAccountInfo().getGid();
+        List<Long> gids = new ArrayList<>();
+        for (int i = 0; i < accounts.size(); ++i) {
+            UserInfo userInfo = YDApiClient.INSTANCE.getModelManager().getOrgModel().findUserInfo(accounts.get(i));
+            if (userInfo.getGid() != myGid) {
+                gids.add(userInfo.getGid());
+            }
+        }
+        if (gids.size() == 1) {
+            YDApiClient.INSTANCE.getModelManager().getSessionModel().createSingleSession(gids.get(0));
+        } else {
+            YDApiClient.INSTANCE.getModelManager().getSessionModel().createMutipleSession(gids);
+        }
     }
 
     @Override
@@ -390,6 +424,7 @@ public class YouduIMPlugin extends CordovaPlugin {
         textDialog.setCanceledOnTouchOutside(false);
         textDialog.show();
     }
+
 
     @NotificationHandler(name = YDSessionModel.CREATE_SINGLE_SESSION_SUCCESS)
     void onCreateSingleSessionSuccess(boolean result, SessionInfo sessionInfo) {
