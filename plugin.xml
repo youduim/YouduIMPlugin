@@ -40,11 +40,19 @@
             	android:value="@string/huawei_app_id" />
             
         	<provider
-            	android:name="com.huawei.hms.update.provider.UpdateProvider"
-            	android:authorities="your_app_id.update.provider"
-            	android:exported="false"
-            	android:grantUriPermissions="true" />
-
+            		android:name="com.huawei.hms.update.provider.UpdateProvider"
+            		android:authorities="your_app_id.update.provider"
+            		android:exported="false"
+            		android:grantUriPermissions="true" />
+		<provider
+            		android:name="android.support.v4.content.FileProvider"
+            		android:authorities="your_app_id.provider"
+            		android:exported="false"
+            		android:grantUriPermissions="true">
+            		<meta-data
+                		android:name="android.support.FILE_PROVIDER_PATHS"
+                		android:resource="@xml/provider_path" />
+        	</provider>
         	<receiver android:name="im.xinda.youdu.broadcastreceiver.MeizuBroadcastReceiver">
             	<intent-filter>
                 	<action android:name="com.meizu.flyme.push.intent.MESSAGE" />
