@@ -321,9 +321,6 @@ public class YouduIMPlugin extends CordovaPlugin {
             public void onDownloading() {
                 
             }
-    }
-
-
         }, sessionId);
 
     }
