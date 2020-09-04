@@ -316,6 +316,12 @@ public class YouduIMPlugin extends CordovaPlugin {
                     return uri;
                 return sessionId;
             }
+            
+            @Override
+            public void onDownloading() {
+                
+            }
+    }
 
 
         }, sessionId);
